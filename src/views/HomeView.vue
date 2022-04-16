@@ -1,5 +1,5 @@
 <template>
-<div class="mt-16">
+<div>
     <div class="toolbar flex justify-between">
         <div class="left">
             <h1 class="text-2xl font-bold">Note List</h1>

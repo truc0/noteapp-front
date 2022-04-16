@@ -1,14 +1,26 @@
 <template>
-<div class="mt-16">
+<div>
     <div class="toolbar flex justify-between">
         <div class="left">
             <h1 class="text-2xl font-bold"
                 v-text="title"></h1>
         </div>
 
-        <div class="right">
+        <div class="right flex justify-center items-center">
             <button
-                class="rounded px-2 py-1 transition-all
+                class="px-2 py-1 transition-all
+                        text-gray-500 hover:text-gray-900"
+                title="Edit"
+            >
+                <router-link :to="{ name: 'notes-edit', params: { id } }">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                </router-link>
+            </button>
+
+            <button
+                class="px-2 py-1 transition-all
                         text-red-400 hover:text-red-600"
                 title="Delete"
                 @click="deleteNote"
@@ -37,8 +49,8 @@ export default {
     },
     data() {
         return {
-            title: 'Title',
-            content: 'Content goes here!',
+            title: '',
+            content: '',
         }
     },
     methods: {
