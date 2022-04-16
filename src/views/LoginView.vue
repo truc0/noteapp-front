@@ -1,7 +1,7 @@
 <template>
 <div>
     <form 
-        @submit.prevent="register"
+        @submit.prevent="login"
         class="flex flex-col mt-16"
     >
         <ul
@@ -16,18 +16,6 @@
                     class="list-disc list-inside"
                 ></li>
         </ul>
-
-        <div class="field">
-            <label for="email" class="font-bold block text-lg">Email</label>
-            <input 
-                class="mt-1 px-2 py-1 w-full
-                    border rounded outline-none 
-                    focus:ring"
-                type="text" 
-                name="email"
-                v-model="email"
-            >
-        </div>
 
         <div class="field mt-2">
             <label for="username" class="font-bold block text-lg">Username</label>
@@ -53,99 +41,71 @@
             >
         </div>
 
-        <div class="field mt-2">
-            <label for="password" class="font-bold block text-lg">
-                Confirm Password
-            </label>
-            <input 
-                class="mt-1 px-2 py-1 w-full
-                    border rounded outline-none 
-                    focus:ring"
-                type="password" 
-                name="password"
-                v-model="passwordConfirm"
-            >
-        </div>
-
         <div class="submit mt-6">
             <button 
                 class="px-2 py-2 w-full transition-all
                         font-bold text-yellow-400
                         border rounded border-yellow-400
                         hover:text-white hover:bg-yellow-400"
-            >Register</button>
+            >Login</button>
         </div>
     </form>
 </div>
 </template>
 
 <script>
-import axios from 'axios'
-
 import { URL_BASE } from '@/config'
 
 export default {
     data() {
         return {
-            email: '',
+            errors: [],
             username: '',
-            password: '',
-            passwordConfirm: '',
-            errors: []
+            password: ''
         }
     },
     methods: {
         validate() {
-            this.errors = []
-
-            if (this.email === '') {
-                this.errors.push('Email cannot be empty')
-            } else if (! /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email)) {
-                this.errors.push('Email is not valid')    
-            }
+            this.errors.length = 0
 
             if (this.username === '') {
                 this.errors.push('Username cannot be empty')
             }
-
             if (this.password === '') {
                 this.errors.push('Password cannot be empty')
             }
 
-            if (this.passwordConfirm !== this.password) {
-                this.errors.push('Password does not match')
-            }
-
             return this.errors.length === 0
         },
-        register() {
-            const info = {
-                email: this.email,
+
+        login() {
+            const credentials = {
                 username: this.username,
-                password: this.password,
+                password: this.password
             }
 
-            if (!this.validate()) {
-                return
-            }
+            if (!this.validate()) { return }
 
-            axios.post(`${URL_BASE}/auth/register`, info)
+            axios.post(`${URL_BASE}/auth/login`, credentials)
                 .then(response => {
-                    if (response.status === 201) {
-                        console.log('Created')
+                    if (response.status === 200) {
+                        console.log(response.data.token)
+                        this.$store.commit('setToken', response.data.token)
+                    } else {
+                        this.errors.length = 0
+                        this.errors.push(`Internal error with status ${response.status}`)
                     }
                 }).catch(e => {
-                    this.errors.push('Unknown error')
-                    console.log(e)
+                    if (e.response.status === 400) {
+                        this.errors.length = 0
+                        this.errors.push('Invalid username or password')
+                    } else {
+                        this.errors.push('Unknown error')
+                        console.log(e)
+                    }
                 }).then(() => {
-                    this.$router.push({
-                        name: 'login'
-                    })
                 })
         }
     }
 }
 </script>
-
-<style lang="scss">
-</style>

@@ -14,6 +14,14 @@
   </div>
 </template>
 
+<script>
+export default {
+  created() {
+    this.$store.commit('fetchToken')
+  }
+}
+</script>
+
 <style>
 #app {
   min-height: 100vh;
