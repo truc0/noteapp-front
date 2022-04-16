@@ -91,7 +91,12 @@ export default {
                     Authorization: `Token ${this.token}`
                 }
             }).then(response => {
-                console.log(response.data)
+                this.$router.push({
+                    name: 'notes-detail',
+                    params: {
+                        id: response.data.id
+                    }
+                })
             }).catch(e => {
                 if (e.status === 400) {
                     this.errors.length = 0
