@@ -17,6 +17,11 @@ const routes = [
     component: () => import('@/views/notes/CreateView.vue')
   },
   {
+    path: '/notes/:id',
+    name: 'notes-detail',
+    component: () => import('@/views/notes/DetailView.vue')
+  },
+  {
     path: '/register',
     name: 'register',
     component: RegisterView

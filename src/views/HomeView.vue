@@ -22,8 +22,19 @@
     <hr class="my-3">
 
     <ul class="notes">
-        <li v-for="note in notes">
-            #{{ note.id }} | {{ note.title }}
+        <li 
+            class="flex justify-between"
+            v-for="note in notes"
+        >
+            <div class="left">
+                #{{ note.id }} | {{ note.title }}
+            </div>
+            <div class="right transition-all
+                        text-blue-500 hover:text-blue-600 hover:underline">
+                <router-link 
+                    :to="{ name: 'notes-detail', params: { id: note.id } }"
+                >Link</router-link>
+            </div>
         </li>
     </ul>
 </div>
@@ -40,13 +51,7 @@ export default {
     },
     data() {
         return {
-            notes: [
-                {
-                    id: 1,
-                    title: 'HelloWorld',
-                    content: 'The content goes here'
-                }
-            ]
+            notes: []
         }
     },
     methods: {
