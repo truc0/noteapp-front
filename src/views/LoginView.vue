@@ -104,6 +104,9 @@ export default {
                         console.log(e)
                     }
                 }).then(() => {
+                    this.$router.push({
+                        name: 'home'
+                    })
                 })
         }
     }
